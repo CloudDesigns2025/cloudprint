@@ -21,7 +21,7 @@ export default function Home() {
           playsInline
           className="w-[70%] h-auto object-cover z-0"
         >
-          <source src="/videos/CLOUD.mp4" type="video/mp4" />
+          <source src="/Videos/CLOUD.mp4" type="video/mp4" />
           Tu navegador no soporta video HTML5.
         </video>
 
