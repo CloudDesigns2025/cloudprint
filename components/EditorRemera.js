@@ -1,141 +1,56 @@
-import { Stage, Layer, Image as KonvaImage, Transformer } from 'react-konva';
-import { useRef, useEffect, useState } from 'react';
+import { Stage, Layer, Image as KonvaImage } from 'react-konva';
 import useImage from 'use-image';
+import { useEffect } from 'react';
 
 export default function EditorRemera({ colorRemera, lado, imagenesCliente, setImagenesCliente, stageRef }) {
   const [mockup] = useImage(`/Mockups/${lado}-${colorRemera}.png`);
-  const mockupNodeRef = useRef(null);
-  const [mockupSize, setMockupSize] = useState({ width: 0, height: 0 });
-  const [selectedId, setSelectedId] = useState(null);
 
-  // Ajustar tamaño del mockup una vez cargado
-  useEffect(() => {
-    if (mockup?.width && mockup?.height) {
-      const isMobile = window.innerWidth < 768;
-      const scaleFactor = isMobile ? 0.6 : 1;
-      setMockupSize({
-        width: mockup.width * scaleFactor,
-        height: mockup.height * scaleFactor,
-      });
-    }
-  }, [mockup]);
+  const handleDragEnd = (e, index) => {
+    const nuevaLista = [...imagenesCliente];
+    nuevaLista[index].props.x = e.target.x();
+    nuevaLista[index].props.y = e.target.y();
+    setImagenesCliente(nuevaLista);
+  };
 
-  // Deseleccionar imagen al hacer clic afuera del canvas
-  useEffect(() => {
-    const handleClickOutside = (e) => {
-      if (!stageRef.current?.container().contains(e.target)) {
-        setSelectedId(null);
-        window.dispatchEvent(new CustomEvent('imagen-seleccionada', { detail: null }));
-      }
+  const handleTransformEnd = (e, index) => {
+    const node = e.target;
+    const nuevaLista = [...imagenesCliente];
+    nuevaLista[index].props = {
+      ...nuevaLista[index].props,
+      x: node.x(),
+      y: node.y(),
+      scaleX: node.scaleX(),
+      scaleY: node.scaleY(),
+      rotation: node.rotation(),
     };
-    window.addEventListener('click', handleClickOutside);
-    return () => window.removeEventListener('click', handleClickOutside);
-  }, []);
+    setImagenesCliente(nuevaLista);
+  };
 
-  const actualizarProps = (index, nuevosProps) => {
-    setImagenesCliente((prev) => {
-      const copia = [...prev];
-      copia[index] = { ...copia[index], props: nuevosProps };
-      return copia;
-    });
+  const handleClick = (index) => {
+    const event = new CustomEvent('imagen-seleccionada', { detail: index });
+    window.dispatchEvent(event);
   };
 
   return (
-    <div className="w-full flex justify-center overflow-auto">
-      {mockup && mockupSize.width > 0 && (
-        <Stage
-          width={mockupSize.width}
-          height={mockupSize.height}
-          ref={stageRef}
-          onMouseDown={(e) => {
-            const clickedEmpty =
-              e.target === e.target.getStage() || e.target === mockupNodeRef.current;
-            if (clickedEmpty) {
-              setSelectedId(null);
-              window.dispatchEvent(new CustomEvent('imagen-seleccionada', { detail: null }));
-            }
-          }}
-        >
-          <Layer>
-            <KonvaImage image={mockup} ref={mockupNodeRef} />
-            {imagenesCliente.map((imagen, i) => (
-              <URLImage
-                key={i}
-                index={i}
-                imagen={imagen}
-                isSelected={selectedId === i}
-                onSelect={() => {
-                  setSelectedId(i);
-                  window.dispatchEvent(new CustomEvent('imagen-seleccionada', { detail: i }));
-                }}
-                onUpdate={(nuevoEstado) => actualizarProps(i, nuevoEstado)}
-              />
-            ))}
-          </Layer>
-        </Stage>
-      )}
-    </div>
-  );
-}
-
-function URLImage({ imagen, isSelected, onSelect, onUpdate }) {
-  const shapeRef = useRef();
-  const trRef = useRef();
-  const [image] = useImage(imagen.src);
-  const [props, setProps] = useState(imagen.props);
-
-  useEffect(() => {
-    if (isSelected && image && trRef.current && shapeRef.current) {
-      trRef.current.nodes([shapeRef.current]);
-      trRef.current.getLayer().batchDraw();
-    }
-  }, [isSelected, image]);
-
-  return (
-    <>
-      <KonvaImage
-        image={image}
-        ref={shapeRef}
-        draggable
-        {...props}
-        onClick={onSelect}
-        onTap={onSelect}
-        onTransformEnd={(e) => {
-          const node = shapeRef.current;
-          const scaleX = node.scaleX();
-          const scaleY = node.scaleY();
-          node.scaleX(1);
-          node.scaleY(1);
-          const nuevosProps = {
-            ...props,
-            x: node.x(),
-            y: node.y(),
-            rotation: node.rotation(),
-            scaleX,
-            scaleY,
-          };
-          setProps(nuevosProps);
-          onUpdate(nuevosProps);
-        }}
-        onDragEnd={(e) => {
-          const nuevosProps = {
-            ...props,
-            x: e.target.x(),
-            y: e.target.y(),
-          };
-          setProps(nuevosProps);
-          onUpdate(nuevosProps);
-        }}
-      />
-      {isSelected && image && (
-        <Transformer
-          ref={trRef}
-          rotateEnabled={true}
-          anchorSize={14}
-          borderStrokeWidth={2}
-          anchorStrokeWidth={2}
-        />
-      )}
-    </>
+    <Stage width={400} height={500} ref={stageRef}>
+      <Layer>
+        {mockup && <KonvaImage image={mockup} width={400} height={500} />}
+        {imagenesCliente.map((img, index) => {
+          const [imagen] = useImage(img.src);
+          return (
+            <KonvaImage
+              key={index}
+              image={imagen}
+              draggable
+              onClick={() => handleClick(index)}
+              onTap={() => handleClick(index)}
+              onDragEnd={(e) => handleDragEnd(e, index)}
+              onTransformEnd={(e) => handleTransformEnd(e, index)}
+              {...img.props}
+            />
+          );
+        })}
+      </Layer>
+    </Stage>
   );
 }
