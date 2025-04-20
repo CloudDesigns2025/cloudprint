@@ -12,37 +12,37 @@ export default function Home() {
         />
       </Head>
 
-      {/* HERO: VIDEO DE FONDO MÁS BAJO */}
-      <div className="relative w-full h-[35vh] sm:h-[40vh] md:h-[70vh] flex items-center justify-center overflow-hidden m-0 p-0 leading-none">
-  <video
-    autoPlay
-    loop
-    muted
-    playsInline
-    className="absolute w-full h-full object-cover z-0"
-  >
-    <source src="/Videos/CLOUD.mp4" type="video/mp4" />
-    Tu navegador no soporta video HTML5.
-  </video>
+      {/* HERO: VIDEO DE FONDO */}
+      <div className="relative w-full h-[40vh] sm:h-[50vh] md:h-[70vh] flex items-center justify-center overflow-hidden m-0 p-0 leading-none">
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          className="absolute w-full h-full object-cover z-0"
+        >
+          <source src="/Videos/CLOUD.mp4" type="video/mp4" />
+          Tu navegador no soporta video HTML5.
+        </video>
 
-  {/* Texto encima del video */}
-  <div className="relative z-10 flex flex-col items-center justify-center text-white px-4 text-center">
-    <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold drop-shadow-xl mb-2">
-      Cloud Print
-    </h1>
-    <p className="text-base sm:text-lg md:text-xl text-cyan-300 font-semibold">
-      es una herramienta de Cloud Designs Argentina
-    </p>
-  </div>
-</div>
+        {/* Texto encima del video */}
+        <div className="relative z-10 flex flex-col items-center justify-center text-white px-4 text-center">
+          <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold drop-shadow-xl mb-2">
+            Cloud Print
+          </h1>
+          <p className="text-lg sm:text-xl md:text-2xl text-cyan-300 font-semibold">
+            es una herramienta de Cloud Designs Argentina
+          </p>
+        </div>
+      </div>
 
-{/* Descripción */}
-<div className="bg-black text-white px-5 sm:px-6 text-center">
-  <p className="text-sm sm:text-base md:text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed py-6 md:py-8">
-    Desarrollada con tecnología web de última generación, Cloud Print ofrece una experiencia rápida, intuitiva y visual que transforma tus ideas en productos personalizados.  
-    Visualizá tus diseños en tiempo real y llevá tu creatividad directo a remeras, tazas, bolsos, morrales... o lo que se te ocurra.
-  </p>
-</div>
+      {/* DESCRIPCIÓN */}
+      <div className="bg-black text-white px-6 text-center">
+        <p className="text-base sm:text-lg md:text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed py-8 sm:py-10">
+          Desarrollada con tecnología web de última generación, Cloud Print ofrece una experiencia rápida, intuitiva y visual que transforma tus ideas en productos personalizados.
+          Visualizá tus diseños en tiempo real y llevá tu creatividad directo a remeras, tazas, bolsos, morrales... o lo que se te ocurra.
+        </p>
+      </div>
 
       {/* BENEFICIOS */}
       <section className="bg-gray-900 text-gray-200 px-6 py-16 text-center">
@@ -52,7 +52,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-4">
             <div className="text-6xl">🧠</div>
             <h3 className="text-xl font-bold text-white">Fácil de usar</h3>
-            <p className="text-sm text-gray-300">
+            <p className="text-base sm:text-sm text-gray-300">
               No necesitás ser diseñador ni tener experiencia previa.<br />
               Subí tu imagen, elegí el producto y ¡listo!<br />
               Desde tu celu o compu, diseñás en segundos. Así de simple.
@@ -63,7 +63,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-4">
             <div className="text-6xl">🛒</div>
             <h3 className="text-xl font-bold text-white">Diseñás y comprás en un solo lugar</h3>
-            <p className="text-sm text-gray-300">
+            <p className="text-base sm:text-sm text-gray-300">
               Cloud Print te permite crear, visualizar y hacer tu pedido sin salir de la página.<br />
               Todo rápido, directo y sin complicaciones.<br />
               Elegís, personalizás y lo mandás a producción al instante.
@@ -74,7 +74,7 @@ export default function Home() {
           <div className="flex flex-col items-center gap-4">
             <div className="text-6xl">📱</div>
             <h3 className="text-xl font-bold text-white">Pedido directo a WhatsApp</h3>
-            <p className="text-sm text-gray-300">
+            <p className="text-base sm:text-sm text-gray-300">
               Una vez que tenés tu diseño listo, lo enviás con un solo clic a nuestro WhatsApp.<br />
               Recibimos tu mockup, lo revisamos y coordinamos la producción al toque.<br />
               ¡Cero vueltas, todo al instante!
@@ -84,12 +84,14 @@ export default function Home() {
 
         {/* CTA FINAL */}
         <div className="mt-12 text-center">
-     <Link href="/personalizar" passHref>
-  <a className="...">🚀 Probar Cloud Print ahora</a>
-</Link>
-        <p className="text-base sm:text-sm text-gray-400 mt-4">
-        No hace falta registrarte. Es gratis y al toque.
-        </p>
+          <Link href="/personalizar" passHref>
+            <a className="inline-block bg-cyan-500 hover:bg-cyan-600 text-white text-lg sm:text-xl font-bold px-8 sm:px-10 py-4 rounded-full shadow-lg transition duration-300">
+              🚀 Probar Cloud Print ahora
+            </a>
+          </Link>
+          <p className="text-sm sm:text-base text-gray-400 mt-3">
+            No hace falta registrarte. Es gratis y al toque.
+          </p>
         </div>
       </section>
     </>
