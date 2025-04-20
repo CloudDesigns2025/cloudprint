@@ -35,11 +35,11 @@ export default function Home() {
       </div>
 
       {/* TEXTO DE DESCRIPCIÓN FUERA DEL BLOQUE DE VIDEO */}
-      <div className="bg-black text-white px-6 -top-10 text-center">
-        <p className="text-base md:text-2xl text-gray-300 max-w-5xl mx-auto leading-relaxed py-8">
-          Desarrollada con tecnología web de última generación, Cloud Print ofrece una experiencia rápida, intuitiva y visual que transforma tus ideas en productos personalizados.  
-          Visualizá tus diseños en tiempo real y llevá tu creatividad directo a remeras, tazas, bolsos, morrales... o lo que se te ocurra.
-        </p>
+      <div className="bg-black text-white px-4 md:px-6 text-center">
+      <p className="text-base md:text-2xl text-gray-300 max-w-5xl mx-auto leading-relaxed py-6 md:py-8">
+      Desarrollada con tecnología web de última generación, Cloud Print ofrece una experiencia rápida, intuitiva y visual que transforma tus ideas en productos personalizados.  
+      Visualizá tus diseños en tiempo real y llevá tu creatividad directo a remeras, tazas, bolsos, morrales... o lo que se te ocurra.
+      </p>
       </div>
 
       {/* BENEFICIOS */}
