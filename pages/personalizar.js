@@ -1,16 +1,13 @@
-'use client';
-
 import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
 const EditorRemera = dynamic(() => import('@/components/EditorRemera'), { ssr: false });
 
-const coloresDisponibles = ['amarillo', 'beneton', 'blanca', 'botella', 'francia', 'marino', 'naranja', 'negra', 'roja'];
+const coloresDisponibles = ['amarilla', 'beneton', 'blanca', 'botella', 'francia', 'marino', 'naranja', 'negra', 'roja'];
 
 export default function Personalizar() {
   const [imagenesCliente, setImagenesCliente] = useState([]);
   const [colorRemera, setColorRemera] = useState('blanca');
-  const [lado, setLado] = useState<'frente' | 'espalda'>('frente');
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
   const [mensaje, setMensaje] = useState('');
@@ -19,14 +16,14 @@ export default function Personalizar() {
   const stageRef = useRef(null);
 
   useEffect(() => {
-    const handler = (e: any) => setSelectedIndex(e.detail);
+    const handler = (e) => setSelectedIndex(e.detail);
     window.addEventListener('imagen-seleccionada', handler);
     return () => window.removeEventListener('imagen-seleccionada', handler);
   }, []);
 
-  const handleImagenChange = (e: any) => {
+  const handleImagenChange = (e) => {
     const archivos = e.target.files;
-    const nuevasImagenes: any[] = [];
+    const nuevasImagenes = [];
 
     for (let i = 0; i < archivos.length; i++) {
       const archivo = archivos[i];
@@ -53,11 +50,13 @@ export default function Personalizar() {
     }
   };
 
-  const handleColorChange = (color: string) => setColorRemera(color);
-  const toggleLado = () => setLado(lado === 'frente' ? 'espalda' : 'frente');
+  const handleColorChange = (color) => {
+    setColorRemera(color);
+  };
 
   const handleEnviarWhatsApp = () => {
     const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
+
     const link = document.createElement('a');
     link.download = `diseño-cloudprint-${Date.now()}.png`;
     link.href = uri;
@@ -68,6 +67,7 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
 
     const linkWhatsApp = `https://wa.me/541123932163?text=${encodeURIComponent(mensajeFinal)}`;
     window.open(linkWhatsApp, '_blank');
+
     setEnviado(true);
   };
 
@@ -79,7 +79,6 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
     setImagenesCliente([]);
     setColorRemera('blanca');
     setSelectedIndex(null);
-    setLado('frente');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -105,7 +104,7 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
       <h1 className="text-4xl font-bold mb-2 text-center">Sé tu mismo el diseñador</h1>
 
       <p className="text-gray-300 mb-6 text-center max-w-2xl text-lg">
-        Subí tu imagen, visualizá tu diseño y disfruta tu pedido YA MISMO!
+        Subí tu imagen, visualizá tu diseño y disfrutá tu pedido YA MISMO!
         <br />
         ¡Creá una prenda 100% única y lista para estampar!
       </p>
@@ -146,17 +145,22 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
               ))}
             </div>
 
-            <button
-              onClick={toggleLado}
-              className="mb-6 px-6 py-2 bg-cyan-600 text-white font-semibold rounded-full hover:bg-cyan-700"
-            >
-              Ver {lado === 'frente' ? 'espalda' : 'frente'}
-            </button>
-
-            <div className="inline-block">
+            {/* Mockup de frente */}
+            <div className="mb-10">
+              <h3 className="text-lg font-semibold mb-2">Frente</h3>
               <EditorRemera
-                colorRemera={colorRemera}
-                lado={lado}
+                colorRemera={`frente-${colorRemera}`}
+                imagenesCliente={imagenesCliente}
+                setImagenesCliente={setImagenesCliente}
+                stageRef={stageRef}
+              />
+            </div>
+
+            {/* Mockup de espalda */}
+            <div className="mb-10">
+              <h3 className="text-lg font-semibold mb-2">Espalda</h3>
+              <EditorRemera
+                colorRemera={`espalda-${colorRemera}`}
                 imagenesCliente={imagenesCliente}
                 setImagenesCliente={setImagenesCliente}
                 stageRef={stageRef}
