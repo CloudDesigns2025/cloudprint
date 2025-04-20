@@ -4,15 +4,26 @@ import useImage from 'use-image';
 
 export default function EditorRemera({ colorRemera, imagenesCliente, setImagenesCliente, stageRef }) {
   const [mockup] = useImage(`/Mockups/${colorRemera}.png`);
+  const containerRef = useRef(null);
   const mockupNodeRef = useRef(null);
-  const [mockupSize, setMockupSize] = useState({ width: 0, height: 0 });
+  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
   const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
-    if (mockup?.width && mockup?.height) {
-      // No escalamos, usamos el tamaño original del mockup
-      setMockupSize({ width: mockup.width, height: mockup.height });
-    }
+    const resizeCanvas = () => {
+      if (mockup && mockup.width && mockup.height && containerRef.current) {
+        const contWidth = containerRef.current.offsetWidth;
+        const scale = contWidth < mockup.width ? contWidth / mockup.width : 1;
+        setCanvasSize({
+          width: mockup.width * scale,
+          height: mockup.height * scale,
+        });
+      }
+    };
+
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    return () => window.removeEventListener('resize', resizeCanvas);
   }, [mockup]);
 
   useEffect(() => {
@@ -35,11 +46,11 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
   };
 
   return (
-    <div className="w-full overflow-auto flex justify-center">
-      {mockup && mockupSize.width > 0 && (
+    <div ref={containerRef} className="w-full px-2 flex justify-center">
+      {mockup && canvasSize.width > 0 && (
         <Stage
-          width={mockupSize.width}
-          height={mockupSize.height}
+          width={canvasSize.width}
+          height={canvasSize.height}
           ref={stageRef}
           onMouseDown={(e) => {
             const clickedEmpty =
@@ -51,7 +62,7 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
           }}
         >
           <Layer>
-            <KonvaImage image={mockup} ref={mockupNodeRef} />
+            <KonvaImage image={mockup} ref={mockupNodeRef} width={canvasSize.width} height={canvasSize.height} />
             {imagenesCliente.map((imagen, i) => (
               <URLImage
                 key={i}
@@ -133,3 +144,4 @@ function URLImage({ imagen, isSelected, onSelect, onUpdate }) {
     </>
   );
 }
+
