@@ -8,6 +8,7 @@ const coloresDisponibles = ['amarilla', 'beneton', 'blanca', 'botella', 'francia
 export default function Personalizar() {
   const [imagenesCliente, setImagenesCliente] = useState([]);
   const [colorRemera, setColorRemera] = useState('blanca');
+  const [lado, setLado] = useState<'frente' | 'espalda'>('frente');
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
   const [mensaje, setMensaje] = useState('');
@@ -16,20 +17,20 @@ export default function Personalizar() {
   const stageRef = useRef(null);
 
   useEffect(() => {
-    const handler = (e) => setSelectedIndex(e.detail);
+    const handler = (e: any) => setSelectedIndex(e.detail);
     window.addEventListener('imagen-seleccionada', handler);
     return () => window.removeEventListener('imagen-seleccionada', handler);
   }, []);
 
-  const handleImagenChange = (e) => {
+  const handleImagenChange = (e: any) => {
     const archivos = e.target.files;
-    const nuevasImagenes = [];
+    const nuevasImagenes: string[] = [];
 
     for (let i = 0; i < archivos.length; i++) {
       const archivo = archivos[i];
       const reader = new FileReader();
       reader.onloadend = () => {
-        nuevasImagenes.push(reader.result);
+        nuevasImagenes.push(reader.result as string);
         if (nuevasImagenes.length === archivos.length) {
           setImagenesCliente((prev) => [
             ...prev,
@@ -50,8 +51,12 @@ export default function Personalizar() {
     }
   };
 
-  const handleColorChange = (color) => {
+  const handleColorChange = (color: string) => {
     setColorRemera(color);
+  };
+
+  const handleLadoChange = (ladoNuevo: 'frente' | 'espalda') => {
+    setLado(ladoNuevo);
   };
 
   const handleEnviarWhatsApp = () => {
@@ -62,9 +67,7 @@ export default function Personalizar() {
     link.href = uri;
     link.click();
 
-    const mensajeFinal = `Hola, soy ${nombre}. Mi número es ${telefono}.
-Este es mi diseño para estampar. Detalles:\n${mensaje}`;
-
+    const mensajeFinal = `Hola, soy ${nombre}. Mi número es ${telefono}.\nEste es mi diseño para estampar. Detalles:\n${mensaje}`;
     const linkWhatsApp = `https://wa.me/541123932163?text=${encodeURIComponent(mensajeFinal)}`;
     window.open(linkWhatsApp, '_blank');
 
@@ -79,6 +82,7 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
     setImagenesCliente([]);
     setColorRemera('blanca');
     setSelectedIndex(null);
+    setLado('frente');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -102,7 +106,6 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
   return (
     <div className="min-h-screen bg-gray-900 text-white px-4 py-10 flex flex-col items-center">
       <h1 className="text-4xl font-bold mb-2 text-center">Sé tu mismo el diseñador</h1>
-
       <p className="text-gray-300 mb-6 text-center max-w-2xl text-lg">
         Subí tu imagen, visualizá tu diseño y disfrutá tu pedido YA MISMO!
         <br />
@@ -121,7 +124,6 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
           multiple
           className="block w-full text-sm text-gray-300 border border-gray-600 rounded-lg cursor-pointer bg-gray-700 focus:outline-none"
         />
-
         <p className="text-sm text-gray-400 mt-2 italic">
           Asegurate de que tu diseño tenga buena calidad y fondo transparente para mejores resultados.
         </p>
@@ -145,27 +147,32 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
               ))}
             </div>
 
-            {/* Mockup de frente */}
-            <div className="mb-10">
-              <h3 className="text-lg font-semibold mb-2">Frente</h3>
-              <EditorRemera
-                colorRemera={`frente-${colorRemera}`}
-                imagenesCliente={imagenesCliente}
-                setImagenesCliente={setImagenesCliente}
-                stageRef={stageRef}
-              />
+            <div className="flex justify-center gap-4 mb-4">
+              <button
+                onClick={() => handleLadoChange('frente')}
+                className={`px-4 py-1 rounded-full font-medium ${
+                  lado === 'frente' ? 'bg-white text-black' : 'bg-gray-700 text-white'
+                }`}
+              >
+                Frente
+              </button>
+              <button
+                onClick={() => handleLadoChange('espalda')}
+                className={`px-4 py-1 rounded-full font-medium ${
+                  lado === 'espalda' ? 'bg-white text-black' : 'bg-gray-700 text-white'
+                }`}
+              >
+                Espalda
+              </button>
             </div>
 
-            {/* Mockup de espalda */}
-            <div className="mb-10">
-              <h3 className="text-lg font-semibold mb-2">Espalda</h3>
-              <EditorRemera
-                colorRemera={`espalda-${colorRemera}`}
-                imagenesCliente={imagenesCliente}
-                setImagenesCliente={setImagenesCliente}
-                stageRef={stageRef}
-              />
-            </div>
+            <EditorRemera
+              colorRemera={colorRemera}
+              lado={lado}
+              imagenesCliente={imagenesCliente}
+              setImagenesCliente={setImagenesCliente}
+              stageRef={stageRef}
+            />
 
             <div className="flex flex-wrap justify-center gap-4 mt-6">
               <button
@@ -179,7 +186,6 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
               >
                 Eliminar imagen seleccionada
               </button>
-
               <button
                 onClick={borrarTodasLasImagenes}
                 className="px-4 py-2 rounded font-medium bg-red-600 hover:bg-red-700 text-white"
@@ -199,7 +205,6 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
               onChange={(e) => setNombre(e.target.value)}
               className="mb-4 w-full p-2 rounded bg-gray-900 border border-gray-600 text-white"
             />
-
             <input
               type="tel"
               placeholder="Tu teléfono"
@@ -207,7 +212,6 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
               onChange={(e) => setTelefono(e.target.value)}
               className="mb-4 w-full p-2 rounded bg-gray-900 border border-gray-600 text-white"
             />
-
             <textarea
               placeholder="Comentario o detalle del pedido..."
               value={mensaje}
