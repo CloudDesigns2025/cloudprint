@@ -5,17 +5,18 @@ import useImage from 'use-image';
 export default function EditorRemera({ colorRemera, imagenesCliente, setImagenesCliente, stageRef }) {
   const [mockup] = useImage(`/Mockups/${colorRemera}.png`);
   const mockupNodeRef = useRef(null);
+  const containerRef = useRef(null);
   const [mockupSize, setMockupSize] = useState({ width: 0, height: 0 });
   const [selectedId, setSelectedId] = useState(null);
 
-  // Detectar tamaño del mockup
   useEffect(() => {
     if (mockup?.width && mockup?.height) {
-      setMockupSize({ width: mockup.width, height: mockup.height });
+      const isMobile = window.innerWidth < 768;
+      const scaleFactor = isMobile ? 0.6 : 1;
+      setMockupSize({ width: mockup.width * scaleFactor, height: mockup.height * scaleFactor });
     }
   }, [mockup]);
 
-  // Deseleccionar al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!stageRef.current?.container().contains(e.target)) {
@@ -36,7 +37,7 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
   };
 
   return (
-    <div className="inline-block">
+    <div ref={containerRef} className="w-full flex justify-center overflow-auto">
       {mockup && mockupSize.width > 0 && (
         <Stage
           width={mockupSize.width}
@@ -53,7 +54,6 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
         >
           <Layer>
             <KonvaImage image={mockup} ref={mockupNodeRef} />
-
             {imagenesCliente.map((imagen, i) => (
               <URLImage
                 key={i}
@@ -123,7 +123,15 @@ function URLImage({ imagen, isSelected, onSelect, onUpdate }) {
           onUpdate(nuevosProps);
         }}
       />
-      {isSelected && image && <Transformer ref={trRef} />}
+      {isSelected && image && (
+        <Transformer
+          ref={trRef}
+          rotateEnabled={true}
+          anchorSize={14} // más grande para móviles
+          borderStrokeWidth={2}
+          anchorStrokeWidth={2}
+        />
+      )}
     </>
   );
 }
