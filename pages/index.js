@@ -13,15 +13,14 @@ export default function Home() {
       </Head>
 
       {/* HERO: VIDEO DE FONDO MÁS BAJO */}
-      <div className="relative w-full h-[60vh] sm:h-[50vh] flex items-center justify-center overflow-hidden">
-        <video
-        autoPlay
-        loop
-        muted
-        playsInline
+      <div className="relative w-full h-[35vh] sm:h-[50vh] lg:h-[60vh] flex items-center justify-center overflow-hidden">
+      <video
+      autoPlay
+      loop
+      muted
+      playsInline
       className="absolute top-0 left-0 w-full h-full object-cover z-0"
         />
-   
           <source src="/Videos/CLOUD.mp4" type="video/mp4" />
           Tu navegador no soporta video HTML5.
         </video>
