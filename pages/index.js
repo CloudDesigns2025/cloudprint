@@ -27,11 +27,11 @@ export default function Home() {
 
         {/* Overlay con texto */}
         <div className="absolute z-10 flex flex-col items-center justify-center text-white px-6 text-center space-y-0 translate-y-40">
-          <h1 className="text-3xl md:text-4xl font-bold drop-shadow-lg">Cloud Print</h1>
-          <p className="text-sm md:text-base text-gray-200">
-            es una herramienta de <span className="text-cyan-300 font-semibold">Cloud Designs Argentina</span>
-          </p>
-        </div>
+        <h1 className="text-4xl md:text-5xl font-bold drop-shadow-lg">Cloud Print</h1>
+        <p className="text-base md:text-lg text-gray-200">
+        es una herramienta de <span className="text-cyan-300 font-semibold">Cloud Designs Argentina</span>
+        </p>
+      </div>
       </div>
 
       {/* TEXTO DE DESCRIPCIÓN FUERA DEL BLOQUE DE VIDEO */}
