@@ -4,26 +4,18 @@ import useImage from 'use-image';
 
 export default function EditorRemera({ colorRemera, imagenesCliente, setImagenesCliente, stageRef }) {
   const [mockup] = useImage(`/Mockups/${colorRemera}.png`);
-  const containerRef = useRef(null);
   const mockupNodeRef = useRef(null);
-  const [canvasSize, setCanvasSize] = useState({ width: 0, height: 0 });
+  const containerRef = useRef(null);
+  const [mockupSize, setMockupSize] = useState({ width: 0, height: 0 });
   const [selectedId, setSelectedId] = useState(null);
 
+  // Escalar solo si el ancho de pantalla es menor a 768px
   useEffect(() => {
-    const resizeCanvas = () => {
-      if (mockup && mockup.width && mockup.height && containerRef.current) {
-        const contWidth = containerRef.current.offsetWidth;
-        const scale = contWidth < mockup.width ? contWidth / mockup.width : 1;
-        setCanvasSize({
-          width: mockup.width * scale,
-          height: mockup.height * scale,
-        });
-      }
-    };
-
-    resizeCanvas();
-    window.addEventListener('resize', resizeCanvas);
-    return () => window.removeEventListener('resize', resizeCanvas);
+    if (mockup?.width && mockup?.height) {
+      const isMobile = window.innerWidth < 768;
+      const scaleFactor = isMobile ? 0.7 : 1; // podés ajustar el 0.7
+      setMockupSize({ width: mockup.width * scaleFactor, height: mockup.height * scaleFactor });
+    }
   }, [mockup]);
 
   useEffect(() => {
@@ -46,11 +38,11 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
   };
 
   return (
-    <div ref={containerRef} className="w-full px-2 flex justify-center">
-      {mockup && canvasSize.width > 0 && (
+    <div ref={containerRef} className="w-full flex justify-center overflow-auto">
+      {mockup && mockupSize.width > 0 && (
         <Stage
-          width={canvasSize.width}
-          height={canvasSize.height}
+          width={mockupSize.width}
+          height={mockupSize.height}
           ref={stageRef}
           onMouseDown={(e) => {
             const clickedEmpty =
@@ -62,7 +54,7 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
           }}
         >
           <Layer>
-            <KonvaImage image={mockup} ref={mockupNodeRef} width={canvasSize.width} height={canvasSize.height} />
+            <KonvaImage image={mockup} ref={mockupNodeRef} />
             {imagenesCliente.map((imagen, i) => (
               <URLImage
                 key={i}
@@ -144,4 +136,3 @@ function URLImage({ imagen, isSelected, onSelect, onUpdate }) {
     </>
   );
 }
-
