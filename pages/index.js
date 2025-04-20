@@ -26,13 +26,13 @@ export default function Home() {
         </video>
 
         {/* Overlay con texto */}
-        <div className="absolute z-10 flex flex-col items-center justify-center text-white px-6 text-center space-y-0 translate-y-40">
-        <h1 className="text-4xl md:text-5xl font-bold drop-shadow-lg">Cloud Print</h1>
-        <p className="text-base md:text-lg text-gray-200">
+        <div className="absolute z-10 flex flex-col items-center justify-center text-white px-4 text-center space-y-1 translate-y-32 sm:translate-y-40">
+        <h1 className="text-5xl sm:text-6xl font-extrabold drop-shadow-xl">Cloud Print</h1>
+        <p className="text-lg sm:text-xl text-gray-200 font-medium leading-snug">
         es una herramienta de <span className="text-cyan-300 font-semibold">Cloud Designs Argentina</span>
         </p>
-      </div>
-      </div>
+        </div>
+        </div>
 
       {/* TEXTO DE DESCRIPCIÓN FUERA DEL BLOQUE DE VIDEO */}
       <div className="bg-black text-white px-6 -top-10 text-center">
