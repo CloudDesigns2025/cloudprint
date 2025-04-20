@@ -1,13 +1,16 @@
+'use client';
+
 import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
 const EditorRemera = dynamic(() => import('@/components/EditorRemera'), { ssr: false });
 
-const coloresDisponibles = ['amarilla', 'beneton', 'blanca', 'botella', 'francia', 'marino', 'naranja', 'negra', 'roja'];
+const coloresDisponibles = ['amarillo', 'beneton', 'blanca', 'botella', 'francia', 'marino', 'naranja', 'negra', 'roja'];
 
 export default function Personalizar() {
   const [imagenesCliente, setImagenesCliente] = useState([]);
   const [colorRemera, setColorRemera] = useState('blanca');
+  const [lado, setLado] = useState<'frente' | 'espalda'>('frente');
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
   const [mensaje, setMensaje] = useState('');
@@ -16,14 +19,14 @@ export default function Personalizar() {
   const stageRef = useRef(null);
 
   useEffect(() => {
-    const handler = (e) => setSelectedIndex(e.detail);
+    const handler = (e: any) => setSelectedIndex(e.detail);
     window.addEventListener('imagen-seleccionada', handler);
     return () => window.removeEventListener('imagen-seleccionada', handler);
   }, []);
 
-  const handleImagenChange = (e) => {
+  const handleImagenChange = (e: any) => {
     const archivos = e.target.files;
-    const nuevasImagenes = [];
+    const nuevasImagenes: any[] = [];
 
     for (let i = 0; i < archivos.length; i++) {
       const archivo = archivos[i];
@@ -50,13 +53,11 @@ export default function Personalizar() {
     }
   };
 
-  const handleColorChange = (color) => {
-    setColorRemera(color);
-  };
+  const handleColorChange = (color: string) => setColorRemera(color);
+  const toggleLado = () => setLado(lado === 'frente' ? 'espalda' : 'frente');
 
   const handleEnviarWhatsApp = () => {
     const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
-
     const link = document.createElement('a');
     link.download = `diseño-cloudprint-${Date.now()}.png`;
     link.href = uri;
@@ -67,7 +68,6 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
 
     const linkWhatsApp = `https://wa.me/541123932163?text=${encodeURIComponent(mensajeFinal)}`;
     window.open(linkWhatsApp, '_blank');
-
     setEnviado(true);
   };
 
@@ -79,6 +79,7 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
     setImagenesCliente([]);
     setColorRemera('blanca');
     setSelectedIndex(null);
+    setLado('frente');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -136,16 +137,26 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
                 <button
                   key={color}
                   onClick={() => handleColorChange(color)}
-                  className={`${colorRemera === color ? 'bg-white text-black' : 'bg-gray-700'} px-4 py-2 rounded-full font-medium border`}
+                  className={`px-4 py-2 rounded-full font-medium border ${
+                    colorRemera === color ? 'bg-white text-black' : 'bg-gray-700'
+                  }`}
                 >
                   {color.charAt(0).toUpperCase() + color.slice(1)}
                 </button>
               ))}
             </div>
 
+            <button
+              onClick={toggleLado}
+              className="mb-6 px-6 py-2 bg-cyan-600 text-white font-semibold rounded-full hover:bg-cyan-700"
+            >
+              Ver {lado === 'frente' ? 'espalda' : 'frente'}
+            </button>
+
             <div className="inline-block">
               <EditorRemera
                 colorRemera={colorRemera}
+                lado={lado}
                 imagenesCliente={imagenesCliente}
                 setImagenesCliente={setImagenesCliente}
                 stageRef={stageRef}
@@ -156,9 +167,11 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
               <button
                 onClick={eliminarImagenSeleccionada}
                 disabled={selectedIndex === null}
-                className={`${selectedIndex === null
-                  ? 'bg-gray-500 cursor-not-allowed'
-                  : 'bg-red-600 hover:bg-red-700'} px-4 py-2 rounded font-medium text-white`}
+                className={`px-4 py-2 rounded font-medium ${
+                  selectedIndex === null
+                    ? 'bg-gray-500 cursor-not-allowed'
+                    : 'bg-red-600 hover:bg-red-700'
+                } text-white`}
               >
                 Eliminar imagen seleccionada
               </button>
