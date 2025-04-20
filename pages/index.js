@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 
 export default function Home() {
   return (
@@ -40,6 +41,7 @@ export default function Home() {
           Visualizá tus diseños en tiempo real y llevá tu creatividad directo a remeras, tazas, bolsos, morrales... o lo que se te ocurra.
         </p>
       </div>
+
       {/* BENEFICIOS */}
       <section className="bg-gray-900 text-gray-200 px-6 py-16 text-center">
         <div className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 text-center">
@@ -80,12 +82,11 @@ export default function Home() {
 
         {/* CTA FINAL */}
         <div className="mt-12 text-center">
-          <a
-            href="/personalizar"
-            className="inline-block bg-cyan-500 hover:bg-cyan-600 text-white text-xl font-bold px-10 py-4 rounded-full shadow-lg transition duration-300"
-          >
-            🚀 Probar Cloud Print ahora
-          </a>
+          <Link href="/personalizar" passHref>
+            <a className="inline-block bg-cyan-500 hover:bg-cyan-600 text-white text-xl font-bold px-10 py-4 rounded-full shadow-lg transition duration-300">
+              🚀 Probar Cloud Print ahora
+            </a>
+          </Link>
           <p className="text-sm text-gray-400 mt-2">
             No hace falta registrarte. Es gratis y al toque.
           </p>
