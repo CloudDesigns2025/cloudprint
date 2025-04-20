@@ -8,19 +8,16 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
   const containerRef = useRef(null);
   const [mockupSize, setMockupSize] = useState({ width: 0, height: 0 });
   const [selectedId, setSelectedId] = useState(null);
-  const [scaleFactor, setScaleFactor] = useState(1);
 
-  // Detectar tamaño del mockup y aplicar escala para mobile
   useEffect(() => {
     if (mockup?.width && mockup?.height) {
       const isMobile = window.innerWidth < 768;
-      const factor = isMobile ? 0.6 : 1;
-      setScaleFactor(factor);
-      setMockupSize({ width: mockup.width, height: mockup.height });
+      const maxWidth = isMobile ? window.innerWidth * 0.9 : mockup.width;
+      const scaleFactor = maxWidth / mockup.width;
+      setMockupSize({ width: mockup.width * scaleFactor, height: mockup.height * scaleFactor });
     }
   }, [mockup]);
 
-  // Deseleccionar al hacer clic fuera del mockup
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!stageRef.current?.container().contains(e.target)) {
@@ -41,21 +38,12 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
   };
 
   return (
-    <div
-      ref={containerRef}
-      className="flex justify-center overflow-auto"
-      style={{
-        width: `${mockupSize.width * scaleFactor}px`,
-        maxWidth: '100%',
-      }}
-    >
+    <div ref={containerRef} className="w-full flex justify-center overflow-x-auto overflow-y-hidden">
       {mockup && mockupSize.width > 0 && (
         <Stage
           width={mockupSize.width}
           height={mockupSize.height}
           ref={stageRef}
-          scaleX={scaleFactor}
-          scaleY={scaleFactor}
           onMouseDown={(e) => {
             const clickedEmpty =
               e.target === e.target.getStage() || e.target === mockupNodeRef.current;
@@ -140,7 +128,7 @@ function URLImage({ imagen, isSelected, onSelect, onUpdate }) {
         <Transformer
           ref={trRef}
           rotateEnabled={true}
-          anchorSize={14} // más grande para móviles
+          anchorSize={18} // más grande para móvil
           borderStrokeWidth={2}
           anchorStrokeWidth={2}
         />
@@ -148,4 +136,3 @@ function URLImage({ imagen, isSelected, onSelect, onUpdate }) {
     </>
   );
 }
-
