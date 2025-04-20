@@ -84,12 +84,9 @@ export default function Home() {
 
         {/* CTA FINAL */}
         <div className="mt-12 text-center">
-        <a
-          href="/personalizar"
-  className="inline-block bg-cyan-500 hover:bg-cyan-600 text-white text-lg md:text-xl font-bold px-8 md:px-10 py-4 md:py-4 rounded-full shadow-lg transition duration-300"
->
-  🚀 Probar Cloud Print ahora
-</a>
+     <Link href="/personalizar" passHref>
+  <a className="...">🚀 Probar Cloud Print ahora</a>
+</Link>
         <p className="text-base sm:text-sm text-gray-400 mt-4">
         No hace falta registrarte. Es gratis y al toque.
         </p>
