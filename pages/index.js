@@ -26,7 +26,7 @@ export default function Home() {
         </video>
 
         {/* Texto encima del video */}
-        <div className="relative z-10 flex flex-col items-center justify-center text-white px-4 text-center translate-y-8 sm:translate-y-12 md:translate-y-60">
+        <div className="relative z-10 flex flex-col items-center justify-center text-white px-4 text-center translate-y-8 sm:translate-y-12 md:translate-y-160">
 
           <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold drop-shadow-xl mb-2">
             Cloud Print
