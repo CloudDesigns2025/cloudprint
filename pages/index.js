@@ -13,34 +13,36 @@ export default function Home() {
       </Head>
 
       {/* HERO: VIDEO DE FONDO MÁS BAJO */}
-      <div className="relative w-full h-[50vh] md:h-[70vh] flex items-center justify-center overflow-hidden m-0 p-0 leading-none">
-      <video
-      autoPlay
-      loop
-      muted
-      playsInline
-      className="w-[100%] md:w-[70%] h-auto object-cover z-0"
-    >
-      <source src="/Videos/CLOUD.mp4" type="video/mp4" />
-      Tu navegador no soporta video HTML5.
-      </video>
+      <div className="relative w-full h-[35vh] sm:h-[40vh] md:h-[70vh] flex items-center justify-center overflow-hidden m-0 p-0 leading-none">
+  <video
+    autoPlay
+    loop
+    muted
+    playsInline
+    className="absolute w-full h-full object-cover z-0"
+  >
+    <source src="/Videos/CLOUD.mp4" type="video/mp4" />
+    Tu navegador no soporta video HTML5.
+  </video>
 
-      {/* Overlay con texto */}
-      <div className="absolute z-10 flex flex-col items-center justify-center text-white px-4 text-center translate-y-32 md:translate-y-40">
-       <h1 className="text-3xl md:text-5xl font-bold drop-shadow-xl leading-tight">Cloud Print</h1>
-      <p className="text-base md:text-xl text-cyan-300 font-semibold">
+  {/* Texto encima del video */}
+  <div className="relative z-10 flex flex-col items-center justify-center text-white px-4 text-center">
+    <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold drop-shadow-xl mb-2">
+      Cloud Print
+    </h1>
+    <p className="text-base sm:text-lg md:text-xl text-cyan-300 font-semibold">
       es una herramienta de Cloud Designs Argentina
-      </p>
-      </div>
-      </div>
+    </p>
+  </div>
+</div>
 
-      {/* TEXTO DE DESCRIPCIÓN FUERA DEL BLOQUE DE VIDEO */}
-      <div className="bg-black text-white px-4 md:px-6 text-center">
-      <p className="text-base md:text-2xl text-gray-300 max-w-5xl mx-auto leading-relaxed py-6 md:py-8">
-      Desarrollada con tecnología web de última generación, Cloud Print ofrece una experiencia rápida, intuitiva y visual que transforma tus ideas en productos personalizados.  
-      Visualizá tus diseños en tiempo real y llevá tu creatividad directo a remeras, tazas, bolsos, morrales... o lo que se te ocurra.
-      </p>
-      </div>
+{/* Descripción */}
+<div className="bg-black text-white px-5 sm:px-6 text-center">
+  <p className="text-sm sm:text-base md:text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed py-6 md:py-8">
+    Desarrollada con tecnología web de última generación, Cloud Print ofrece una experiencia rápida, intuitiva y visual que transforma tus ideas en productos personalizados.  
+    Visualizá tus diseños en tiempo real y llevá tu creatividad directo a remeras, tazas, bolsos, morrales... o lo que se te ocurra.
+  </p>
+</div>
 
       {/* BENEFICIOS */}
       <section className="bg-gray-900 text-gray-200 px-6 py-16 text-center">
