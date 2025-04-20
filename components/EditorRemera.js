@@ -5,16 +5,13 @@ import useImage from 'use-image';
 export default function EditorRemera({ colorRemera, imagenesCliente, setImagenesCliente, stageRef }) {
   const [mockup] = useImage(`/Mockups/${colorRemera}.png`);
   const mockupNodeRef = useRef(null);
-  const containerRef = useRef(null);
   const [mockupSize, setMockupSize] = useState({ width: 0, height: 0 });
   const [selectedId, setSelectedId] = useState(null);
 
   useEffect(() => {
     if (mockup?.width && mockup?.height) {
-      const isMobile = window.innerWidth < 768;
-      const maxWidth = isMobile ? window.innerWidth * 0.9 : mockup.width;
-      const scaleFactor = maxWidth / mockup.width;
-      setMockupSize({ width: mockup.width * scaleFactor, height: mockup.height * scaleFactor });
+      // No escalamos, usamos el tamaño original del mockup
+      setMockupSize({ width: mockup.width, height: mockup.height });
     }
   }, [mockup]);
 
@@ -38,7 +35,7 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
   };
 
   return (
-    <div ref={containerRef} className="w-full flex justify-center overflow-x-auto overflow-y-hidden">
+    <div className="w-full overflow-auto flex justify-center">
       {mockup && mockupSize.width > 0 && (
         <Stage
           width={mockupSize.width}
@@ -128,7 +125,7 @@ function URLImage({ imagen, isSelected, onSelect, onUpdate }) {
         <Transformer
           ref={trRef}
           rotateEnabled={true}
-          anchorSize={18} // más grande para móvil
+          anchorSize={14}
           borderStrokeWidth={2}
           anchorStrokeWidth={2}
         />
