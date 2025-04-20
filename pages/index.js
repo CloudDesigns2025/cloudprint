@@ -26,9 +26,9 @@ export default function Home() {
         </video>
 
         {/* Overlay con texto */}
-        <div className="absolute z-10 flex flex-col items-center justify-center text-white px-4 text-center space-y-1 translate-y-32 sm:translate-y-40">
-        <h1 className="text-5xl sm:text-6xl font-extrabold drop-shadow-xl">Cloud Print</h1>
-        <p className="text-lg sm:text-xl text-gray-200 font-medium leading-snug">
+        <div className="absolute z-10 flex flex-col items-center justify-center text-white px-4 text-center space-y-2 translate-y-28 sm:translate-y-40">
+        <h1 className="text-6xl sm:text-7xl font-extrabold drop-shadow-xl">Cloud Print</h1>
+        <p className="text-xl sm:text-2xl text-gray-200 font-medium leading-snug">
         es una herramienta de <span className="text-cyan-300 font-semibold">Cloud Designs Argentina</span>
         </p>
         </div>
