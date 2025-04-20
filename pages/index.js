@@ -13,28 +13,28 @@ export default function Home() {
       </Head>
 
       {/* HERO: VIDEO DE FONDO */}
-      <div className="relative w-full h-[40vh] sm:h-[50vh] md:h-[70vh] flex items-center justify-center overflow-hidden m-0 p-0 leading-none">
-        <video
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute w-full h-full object-cover z-0"
-        >
-          <source src="/Videos/CLOUD.mp4" type="video/mp4" />
-          Tu navegador no soporta video HTML5.
-        </video>
+<div className="relative w-full h-[30vh] sm:h-[40vh] md:h-[70vh] flex items-center justify-center overflow-hidden m-0 p-0 leading-none">
+  <video
+    autoPlay
+    loop
+    muted
+    playsInline
+    className="absolute w-full h-full object-contain sm:object-cover z-0"
+  >
+    <source src="/Videos/CLOUD.mp4" type="video/mp4" />
+    Tu navegador no soporta video HTML5.
+  </video>
 
-        {/* Texto encima del video */}
-        <div className="relative z-10 flex flex-col items-center justify-center text-white px-4 text-center">
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-extrabold drop-shadow-xl mb-2">
-            Cloud Print
-          </h1>
-          <p className="text-lg sm:text-xl md:text-2xl text-cyan-300 font-semibold">
-            es una herramienta de Cloud Designs Argentina
-          </p>
-        </div>
-      </div>
+  {/* Texto encima del video */}
+  <div className="relative z-10 flex flex-col items-center justify-center text-white px-4 text-center">
+    <h1 className="text-3xl sm:text-5xl md:text-7xl font-extrabold drop-shadow-xl mb-2">
+      Cloud Print
+    </h1>
+    <p className="text-base sm:text-xl md:text-2xl text-cyan-300 font-semibold">
+      es una herramienta de Cloud Designs Argentina
+    </p>
+  </div>
+</div>
 
       {/* DESCRIPCIÓN */}
       <div className="bg-black text-white px-6 text-center">
