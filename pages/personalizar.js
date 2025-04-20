@@ -1,8 +1,8 @@
-// IMPORTS
 import { useState, useRef, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
 const EditorRemera = dynamic(() => import('@/components/EditorRemera'), { ssr: false });
+
 const coloresDisponibles = ['amarilla', 'beneton', 'blanca', 'botella', 'francia', 'marino', 'naranja', 'negra', 'roja'];
 
 export default function Personalizar() {
@@ -50,10 +50,13 @@ export default function Personalizar() {
     }
   };
 
-  const handleColorChange = (color) => setColorRemera(color);
+  const handleColorChange = (color) => {
+    setColorRemera(color);
+  };
 
   const handleEnviarWhatsApp = () => {
     const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
+
     const link = document.createElement('a');
     link.download = `diseño-cloudprint-${Date.now()}.png`;
     link.href = uri;
@@ -64,6 +67,7 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
 
     const linkWhatsApp = `https://wa.me/541123932163?text=${encodeURIComponent(mensajeFinal)}`;
     window.open(linkWhatsApp, '_blank');
+
     setEnviado(true);
   };
 
@@ -97,17 +101,19 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
 
   return (
     <div className="min-h-screen bg-gray-900 text-white px-4 py-10 flex flex-col items-center">
-      <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-2 text-center">Sé tu mismo el diseñador</h1>
+      <h1 className="text-4xl font-bold mb-2 text-center">Sé tu mismo el diseñador</h1>
 
-      <p className="text-gray-300 mb-6 text-center max-w-2xl text-base sm:text-lg">
+      <p className="text-gray-300 mb-6 text-center max-w-2xl text-lg">
         Subí tu imagen, visualizá tu diseño y disfruta tu pedido YA MISMO!
-        <br />¡Creá una prenda 100% única y lista para estampar!
+        <br />
+        ¡Creá una prenda 100% única y lista para estampar!
       </p>
 
       <div className="bg-gray-800 rounded-lg p-6 w-full max-w-xl shadow-md">
         <label className="block text-sm font-semibold text-white mb-2">
           Seleccioná uno o más archivos (JPG, PNG o PDF) para empezar a personalizar:
         </label>
+
         <input
           type="file"
           accept=".jpg,.jpeg,.png,.pdf"
@@ -115,6 +121,7 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
           multiple
           className="block w-full text-sm text-gray-300 border border-gray-600 rounded-lg cursor-pointer bg-gray-700 focus:outline-none"
         />
+
         <p className="text-sm text-gray-400 mt-2 italic">
           Asegurate de que tu diseño tenga buena calidad y fondo transparente para mejores resultados.
         </p>
@@ -129,38 +136,33 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
                 <button
                   key={color}
                   onClick={() => handleColorChange(color)}
-                  className={`px-4 py-2 rounded-full font-medium border text-sm sm:text-base ${
-                    colorRemera === color ? 'bg-white text-black' : 'bg-gray-700'
-                  }`}
+                  className={`${colorRemera === color ? 'bg-white text-black' : 'bg-gray-700'} px-4 py-2 rounded-full font-medium border`}
                 >
                   {color.charAt(0).toUpperCase() + color.slice(1)}
                 </button>
               ))}
             </div>
 
-            <div className="w-full flex justify-center">
-              <div className="w-full max-w-[90vw] sm:max-w-2xl">
-                <EditorRemera
-                  colorRemera={colorRemera}
-                  imagenesCliente={imagenesCliente}
-                  setImagenesCliente={setImagenesCliente}
-                  stageRef={stageRef}
-                />
-              </div>
+            <div className="inline-block">
+              <EditorRemera
+                colorRemera={colorRemera}
+                imagenesCliente={imagenesCliente}
+                setImagenesCliente={setImagenesCliente}
+                stageRef={stageRef}
+              />
             </div>
 
             <div className="flex flex-wrap justify-center gap-4 mt-6">
               <button
                 onClick={eliminarImagenSeleccionada}
                 disabled={selectedIndex === null}
-                className={`px-4 py-2 rounded font-medium ${
-                  selectedIndex === null
-                    ? 'bg-gray-500 cursor-not-allowed'
-                    : 'bg-red-600 hover:bg-red-700'
-                } text-white`}
+                className={`${selectedIndex === null
+                  ? 'bg-gray-500 cursor-not-allowed'
+                  : 'bg-red-600 hover:bg-red-700'} px-4 py-2 rounded font-medium text-white`}
               >
                 Eliminar imagen seleccionada
               </button>
+
               <button
                 onClick={borrarTodasLasImagenes}
                 className="px-4 py-2 rounded font-medium bg-red-600 hover:bg-red-700 text-white"
@@ -172,6 +174,7 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
 
           <div className="mt-10 max-w-xl w-full bg-gray-800 p-6 rounded shadow-md">
             <h3 className="text-lg font-semibold mb-4">Tus datos:</h3>
+
             <input
               type="text"
               placeholder="Tu nombre"
@@ -179,6 +182,7 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
               onChange={(e) => setNombre(e.target.value)}
               className="mb-4 w-full p-2 rounded bg-gray-900 border border-gray-600 text-white"
             />
+
             <input
               type="tel"
               placeholder="Tu teléfono"
@@ -186,6 +190,7 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
               onChange={(e) => setTelefono(e.target.value)}
               className="mb-4 w-full p-2 rounded bg-gray-900 border border-gray-600 text-white"
             />
+
             <textarea
               placeholder="Comentario o detalle del pedido..."
               value={mensaje}
@@ -193,6 +198,7 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
               rows={3}
               className="mb-4 w-full p-2 rounded bg-gray-900 border border-gray-600 text-white"
             />
+
             <button
               onClick={handleEnviarWhatsApp}
               className="bg-green-500 text-white font-bold px-6 py-2 rounded-full hover:bg-green-600 transition"
@@ -210,7 +216,8 @@ Este es mi diseño para estampar. Detalles:\n${mensaje}`;
               </p>
               <p className="text-sm mb-4">
                 En breve te vamos a responder por WhatsApp para confirmar tu pedido y coordinar la producción.
-                <br />Mientras tanto, ¡seguí creando y personalizando lo que se te ocurra!
+                <br />
+                Mientras tanto, ¡seguí creando y personalizando lo que se te ocurra!
               </p>
               <button
                 onClick={handleCerrarMensaje}
