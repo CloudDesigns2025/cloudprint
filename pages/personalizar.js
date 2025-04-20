@@ -8,7 +8,7 @@ const coloresDisponibles = ['amarilla', 'beneton', 'blanca', 'botella', 'francia
 export default function Personalizar() {
   const [imagenesCliente, setImagenesCliente] = useState([]);
   const [colorRemera, setColorRemera] = useState('blanca');
-  const [lado, setLado] = useState<'frente' | 'espalda'>('frente');
+  const [lado, setLado] = useState('frente');
   const [nombre, setNombre] = useState('');
   const [telefono, setTelefono] = useState('');
   const [mensaje, setMensaje] = useState('');
@@ -17,20 +17,20 @@ export default function Personalizar() {
   const stageRef = useRef(null);
 
   useEffect(() => {
-    const handler = (e: any) => setSelectedIndex(e.detail);
+    const handler = (e) => setSelectedIndex(e.detail);
     window.addEventListener('imagen-seleccionada', handler);
     return () => window.removeEventListener('imagen-seleccionada', handler);
   }, []);
 
-  const handleImagenChange = (e: any) => {
+  const handleImagenChange = (e) => {
     const archivos = e.target.files;
-    const nuevasImagenes: string[] = [];
+    const nuevasImagenes = [];
 
     for (let i = 0; i < archivos.length; i++) {
       const archivo = archivos[i];
       const reader = new FileReader();
       reader.onloadend = () => {
-        nuevasImagenes.push(reader.result as string);
+        nuevasImagenes.push(reader.result);
         if (nuevasImagenes.length === archivos.length) {
           setImagenesCliente((prev) => [
             ...prev,
@@ -51,19 +51,14 @@ export default function Personalizar() {
     }
   };
 
-  const handleColorChange = (color: string) => {
-    setColorRemera(color);
-  };
-
-  const handleLadoChange = (ladoNuevo: 'frente' | 'espalda') => {
-    setLado(ladoNuevo);
-  };
+  const handleColorChange = (color) => setColorRemera(color);
+  const handleLadoChange = (ladoNuevo) => setLado(ladoNuevo);
 
   const handleEnviarWhatsApp = () => {
     const uri = stageRef.current.toDataURL({ pixelRatio: 2 });
 
     const link = document.createElement('a');
-   link.download = `diseño-cloudprint-${Date.now()}.png`;
+    link.download = `diseño-cloudprint-${Date.now()}.png`;
     link.href = uri;
     link.click();
 
@@ -116,7 +111,6 @@ export default function Personalizar() {
         <label className="block text-sm font-semibold text-white mb-2">
           Seleccioná uno o más archivos (JPG, PNG o PDF) para empezar a personalizar:
         </label>
-
         <input
           type="file"
           accept=".jpg,.jpeg,.png,.pdf"
@@ -197,7 +191,6 @@ export default function Personalizar() {
 
           <div className="mt-10 max-w-xl w-full bg-gray-800 p-6 rounded shadow-md">
             <h3 className="text-lg font-semibold mb-4">Tus datos:</h3>
-
             <input
               type="text"
               placeholder="Tu nombre"
@@ -219,7 +212,6 @@ export default function Personalizar() {
               rows={3}
               className="mb-4 w-full p-2 rounded bg-gray-900 border border-gray-600 text-white"
             />
-
             <button
               onClick={handleEnviarWhatsApp}
               className="bg-green-500 text-white font-bold px-6 py-2 rounded-full hover:bg-green-600 transition"
