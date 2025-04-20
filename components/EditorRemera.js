@@ -9,14 +9,14 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
   const [mockupSize, setMockupSize] = useState({ width: 0, height: 0 });
   const [selectedId, setSelectedId] = useState(null);
 
+  // Detectar tamaño original del mockup
   useEffect(() => {
     if (mockup?.width && mockup?.height) {
-      const isMobile = window.innerWidth < 768;
-      const scaleFactor = isMobile ? 0.6 : 1;
-      setMockupSize({ width: mockup.width * scaleFactor, height: mockup.height * scaleFactor });
+      setMockupSize({ width: mockup.width, height: mockup.height });
     }
   }, [mockup]);
 
+  // Deseleccionar al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!stageRef.current?.container().contains(e.target)) {
@@ -36,6 +36,12 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
     });
   };
 
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const scaleFactor = isMobile ? 0.6 : 1;
+  const offsetX = typeof window !== 'undefined'
+    ? (window.innerWidth - mockupSize.width * scaleFactor) / 2
+    : 0;
+
   return (
     <div ref={containerRef} className="w-full flex justify-center overflow-auto">
       {mockup && mockupSize.width > 0 && (
@@ -43,6 +49,9 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
           width={mockupSize.width}
           height={mockupSize.height}
           ref={stageRef}
+          scaleX={scaleFactor}
+          scaleY={scaleFactor}
+          x={offsetX}
           onMouseDown={(e) => {
             const clickedEmpty =
               e.target === e.target.getStage() || e.target === mockupNodeRef.current;
@@ -54,6 +63,7 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
         >
           <Layer>
             <KonvaImage image={mockup} ref={mockupNodeRef} />
+
             {imagenesCliente.map((imagen, i) => (
               <URLImage
                 key={i}
@@ -127,7 +137,7 @@ function URLImage({ imagen, isSelected, onSelect, onUpdate }) {
         <Transformer
           ref={trRef}
           rotateEnabled={true}
-          anchorSize={14} // más grande para móviles
+          anchorSize={14} // Más grande para dedo en móvil
           borderStrokeWidth={2}
           anchorStrokeWidth={2}
         />
