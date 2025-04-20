@@ -2,18 +2,25 @@ import { Stage, Layer, Image as KonvaImage, Transformer } from 'react-konva';
 import { useRef, useEffect, useState } from 'react';
 import useImage from 'use-image';
 
-export default function EditorRemera({ colorRemera, imagenesCliente, setImagenesCliente, stageRef }) {
-  const [mockup] = useImage(`/Mockups/${colorRemera}.png`);
+export default function EditorRemera({ colorRemera, lado, imagenesCliente, setImagenesCliente, stageRef }) {
+  const [mockup] = useImage(`/Mockups/${lado}-${colorRemera}.png`);
   const mockupNodeRef = useRef(null);
   const [mockupSize, setMockupSize] = useState({ width: 0, height: 0 });
   const [selectedId, setSelectedId] = useState(null);
 
+  // Ajustar tamaño del mockup una vez cargado
   useEffect(() => {
     if (mockup?.width && mockup?.height) {
-      setMockupSize({ width: mockup.width, height: mockup.height });
+      const isMobile = window.innerWidth < 768;
+      const scaleFactor = isMobile ? 0.6 : 1;
+      setMockupSize({
+        width: mockup.width * scaleFactor,
+        height: mockup.height * scaleFactor,
+      });
     }
   }, [mockup]);
 
+  // Deseleccionar imagen al hacer clic afuera del canvas
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!stageRef.current?.container().contains(e.target)) {
