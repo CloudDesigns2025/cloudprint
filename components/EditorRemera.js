@@ -8,15 +8,19 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
   const containerRef = useRef(null);
   const [mockupSize, setMockupSize] = useState({ width: 0, height: 0 });
   const [selectedId, setSelectedId] = useState(null);
+  const [scaleFactor, setScaleFactor] = useState(1);
 
-  // Detectar tamaño original del mockup
+  // Detectar tamaño del mockup y aplicar escala para mobile
   useEffect(() => {
     if (mockup?.width && mockup?.height) {
+      const isMobile = window.innerWidth < 768;
+      const factor = isMobile ? 0.6 : 1;
+      setScaleFactor(factor);
       setMockupSize({ width: mockup.width, height: mockup.height });
     }
   }, [mockup]);
 
-  // Deseleccionar al hacer clic fuera
+  // Deseleccionar al hacer clic fuera del mockup
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!stageRef.current?.container().contains(e.target)) {
@@ -36,14 +40,15 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
     });
   };
 
-  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
-  const scaleFactor = isMobile ? 0.6 : 1;
-  const offsetX = typeof window !== 'undefined'
-    ? (window.innerWidth - mockupSize.width * scaleFactor) / 2
-    : 0;
-
   return (
-    <div ref={containerRef} className="w-full flex justify-center overflow-auto">
+    <div
+      ref={containerRef}
+      className="flex justify-center overflow-auto"
+      style={{
+        width: `${mockupSize.width * scaleFactor}px`,
+        maxWidth: '100%',
+      }}
+    >
       {mockup && mockupSize.width > 0 && (
         <Stage
           width={mockupSize.width}
@@ -51,7 +56,6 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
           ref={stageRef}
           scaleX={scaleFactor}
           scaleY={scaleFactor}
-          x={offsetX}
           onMouseDown={(e) => {
             const clickedEmpty =
               e.target === e.target.getStage() || e.target === mockupNodeRef.current;
@@ -63,7 +67,6 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
         >
           <Layer>
             <KonvaImage image={mockup} ref={mockupNodeRef} />
-
             {imagenesCliente.map((imagen, i) => (
               <URLImage
                 key={i}
@@ -137,7 +140,7 @@ function URLImage({ imagen, isSelected, onSelect, onUpdate }) {
         <Transformer
           ref={trRef}
           rotateEnabled={true}
-          anchorSize={14} // Más grande para dedo en móvil
+          anchorSize={14} // más grande para móviles
           borderStrokeWidth={2}
           anchorStrokeWidth={2}
         />
@@ -145,3 +148,4 @@ function URLImage({ imagen, isSelected, onSelect, onUpdate }) {
     </>
   );
 }
+
