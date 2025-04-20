@@ -13,7 +13,7 @@ export default function Home() {
       </Head>
 
       {/* HERO: VIDEO DE FONDO */}
-      <div className="relative w-full h-[40vh] sm:h-[50vh] md:h-[70vh] flex items-center justify-center overflow-hidden m-0 p-0 leading-none">
+      <div className="relative w-full h-[20vh] sm:h-[50vh] md:h-[70vh] flex items-center justify-center overflow-hidden m-0 p-0 leading-none">
         <video
           autoPlay
           loop
