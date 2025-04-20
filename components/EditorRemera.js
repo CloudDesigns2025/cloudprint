@@ -3,21 +3,17 @@ import { useRef, useEffect, useState } from 'react';
 import useImage from 'use-image';
 
 export default function EditorRemera({ colorRemera, imagenesCliente, setImagenesCliente, stageRef }) {
-  const [mockupFrente] = useImage(`/Mockups/frente-${colorRemera}.png`);
-  const [mockupEspalda] = useImage(`/Mockups/espalda-${colorRemera}.png`);
-  const mockupNodeRefFrente = useRef(null);
-  const mockupNodeRefEspalda = useRef(null);
+  const [mockup] = useImage(`/Mockups/${colorRemera}.png`);
+  const mockupNodeRef = useRef(null);
   const [mockupSize, setMockupSize] = useState({ width: 0, height: 0 });
   const [selectedId, setSelectedId] = useState(null);
 
-  // Detectar tamaño del mockup
   useEffect(() => {
-    if (mockupFrente?.width && mockupFrente?.height) {
-      setMockupSize({ width: mockupFrente.width, height: mockupFrente.height });
+    if (mockup?.width && mockup?.height) {
+      setMockupSize({ width: mockup.width, height: mockup.height });
     }
-  }, [mockupFrente]);
+  }, [mockup]);
 
-  // Deseleccionar al hacer clic fuera
   useEffect(() => {
     const handleClickOutside = (e) => {
       if (!stageRef.current?.container().contains(e.target)) {
@@ -38,17 +34,15 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
   };
 
   return (
-    <div className="overflow-auto w-full flex justify-center">
-      {mockupFrente && mockupEspalda && mockupSize.width > 0 && (
+    <div className="w-full flex justify-center overflow-auto">
+      {mockup && mockupSize.width > 0 && (
         <Stage
           width={mockupSize.width}
-          height={mockupSize.height * 2 + 40} // 2 mockups + espacio entre ellos
+          height={mockupSize.height}
           ref={stageRef}
           onMouseDown={(e) => {
             const clickedEmpty =
-              e.target === e.target.getStage() ||
-              e.target === mockupNodeRefFrente.current ||
-              e.target === mockupNodeRefEspalda.current;
+              e.target === e.target.getStage() || e.target === mockupNodeRef.current;
             if (clickedEmpty) {
               setSelectedId(null);
               window.dispatchEvent(new CustomEvent('imagen-seleccionada', { detail: null }));
@@ -56,23 +50,7 @@ export default function EditorRemera({ colorRemera, imagenesCliente, setImagenes
           }}
         >
           <Layer>
-            {/* MOCKUP FRENTE */}
-            <KonvaImage
-              image={mockupFrente}
-              ref={mockupNodeRefFrente}
-              x={0}
-              y={0}
-            />
-
-            {/* MOCKUP ESPALDA */}
-            <KonvaImage
-              image={mockupEspalda}
-              ref={mockupNodeRefEspalda}
-              x={0}
-              y={mockupSize.height + 40}
-            />
-
-            {/* IMÁGENES CLIENTE */}
+            <KonvaImage image={mockup} ref={mockupNodeRef} />
             {imagenesCliente.map((imagen, i) => (
               <URLImage
                 key={i}
